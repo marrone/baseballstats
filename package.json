@@ -1,0 +1,80 @@
+{
+  "name": "trumedia-core-project",
+  "version": "0.1.0",
+  "description": "TruMedia Core Project",
+  "main": "src/scripts/main.js",
+  "engines": {
+    "node": ">= 20"
+  },
+  "type": "module",
+  "directories": {},
+  "scripts": {
+    "build-tests": "./build/build-tests.sh",
+    "run-tests": "NODE_OPTIONS=--experimental-vm-modules node_modules/.bin/mocha --require=@babel/register --require=./tests/boot.js --recursive tests/build/multi-entry.js -n conditions=browser",
+    "test": "npm run build-tests && npm run run-tests",
+    "tests": "npm run test",
+    "dev": "./build/build.sh",
+    "prod": "NODE_ENV=production ./build/build.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "usage",
+          "corejs": 3,
+          "exclude": []
+        }
+      ]
+    ],
+    "exclude": [
+      "**/node_modules/@babel/**"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "~7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/register": "^7.25.9",
+    "@rollup/plugin-babel": "~6.0.4",
+    "@rollup/plugin-commonjs": "~28.0.1",
+    "@rollup/plugin-json": "~6.0.0",
+    "@rollup/plugin-multi-entry": "~6.0.1",
+    "@rollup/plugin-node-resolve": "~15.3.0",
+    "@rollup/plugin-strip": "~3.0.2",
+    "@rollup/plugin-terser": "~0.4.0",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@stylistic/stylelint-plugin": "~3.1.1",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/babel__core": "~7.20.5",
+    "autoprefixer": "~10.4.13",
+    "babel-plugin-istanbul": "~7.0.0",
+    "chai": "~4.3.7",
+    "core-js": "~3.29.0",
+    "cssnano": "~5.1.15",
+    "eslint": "~8.35.0",
+    "eslint-plugin-svelte": "~2.46.1",
+    "jsdom": "^21.1.0",
+    "mocha": "~10.2.0",
+    "nyc": "~15.1.0",
+    "postcss-cli": "~10.1.0",
+    "postcss-html": "~1.6.0",
+    "rollup": "~4.28.0",
+    "rollup-plugin-css-only": "~4.5.2",
+    "rollup-plugin-istanbul": "~5.0.0",
+    "rollup-plugin-livereload": "~2.0.5",
+    "rollup-plugin-svelte": "~7.2.2",
+    "sass": "~1.58.3",
+    "sinon": "~15.0.1",
+    "sinon-chai": "~3.7.0",
+    "strip-debug-cli": "~4.0.0",
+    "stylelint": "~16.11.0",
+    "stylelint-config-standard-scss": "~14.0.0",
+    "svelte": "~4.2.19",
+    "svelte-check": "^4.1.1",
+    "svelte-preprocess": "~6.0.3",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2"
+  }
+}
