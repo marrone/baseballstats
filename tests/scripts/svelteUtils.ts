@@ -1,9 +1,10 @@
 // see: https://dev.to/d_ir/mounting-components-and-asserting-on-the-dom-9kc
 
+/// <reference path='../typings/svelte-internal.d.ts' />
 import { bind, binding_callbacks, set_raf, clear_loops } from "svelte/internal";
-import { tick } from 'svelte';
+import { tick, SvelteComponent } from 'svelte';
 import sinon from "sinon";
-import { callRAFCallbacks, setupDOM } from "./util.js";
+import { callRAFCallbacks, setupDOM } from "./util";
 
 /*
  * The setBindingCallbacks is necessary for testing Svelte component bindings.
@@ -24,19 +25,21 @@ import { callRAFCallbacks, setupDOM } from "./util.js";
  *  });
  */
 
-const setBindingCallbacks = (bindings, component) => {
+type SvelteComponentType = typeof SvelteComponent;
+
+const setBindingCallbacks = (bindings:any, component:SvelteComponent) => {
     Object.keys(bindings).forEach(binding => {
         binding_callbacks.push(() => {
-            bind(component, binding, value => {
+            bind(component, binding, (value:any) => {
                 bindings[binding] = value;
             });
         });
     });
 };
 
-let mountedComponents = [];
+let mountedComponents:SvelteComponent[] = [];
 
-export const mount = (component, props = {}, { bindings = {} } = {}, target = null, opts = {}) => {
+export const mount = (component:SvelteComponentType, props = {}, { bindings = {} } = {}, target = null, opts = {}) => {
     const mounted = new component({
         ...opts,
         target: target || document.body,
@@ -47,11 +50,11 @@ export const mount = (component, props = {}, { bindings = {} } = {}, target = nu
     return mounted;
 };
 
-export const destroyComponent = (component, detaching) => {
+export const destroyComponent = (component:SvelteComponent, detaching:boolean) => {
     const $$ = component.$$;
     if($$.fragment !== null) {
         if($$.on_destroy) { 
-            $$.on_destroy.forEach(f => f());
+            $$.on_destroy.forEach((f:()=>void) => f());
         }
         $$.fragment && $$.fragment.d(detaching); 
         $$.on_destroy = $$.fragment = null;
@@ -65,7 +68,7 @@ export const destroyComponent = (component, detaching) => {
 };
 
 export const unmountAll = () => {
-    mountedComponents.forEach(component => {
+    mountedComponents.forEach((component:SvelteComponent) => {
         component.$destroy();
     });
     mountedComponents = [];
@@ -77,7 +80,7 @@ export const unmountAll = () => {
  * and make sure to call unmountAll after each test to clean up
  * after components
  */
-export const setupSvelteTests = (domOpts) => {
+export const setupSvelteTests = (domOpts?:object) => {
     setupDOM(domOpts);
     afterEach(unmountAll);
     afterEach(clear_loops);
@@ -90,11 +93,13 @@ export const setupSvelteTests = (domOpts) => {
  * @param {string|object} propName - the name of the bound prop; or if passing only 2 args, an object of propName/propVal pairs
  * @param {mixed} [value] - the value of the bound prop; optional if passing the pairs as second arg
  */
-export function updateBoundValue(component, propName/*, [value]*/) {
-    if(arguments.length === 3) {
-        propName = {[propName]: arguments[2]};
+export function updateBoundValue(component:SvelteComponent, propName:string|Partial<any>, value?:any) {
+    if(typeof propName === 'string') { 
+        component.$set({[propName]: arguments[2]});
     }
-    component.$set(propName);
+    else { 
+        component.$set(propName);
+    }
 }
 
 /**
@@ -105,7 +110,7 @@ export function updateBoundValue(component, propName/*, [value]*/) {
  *
  * @return {mixed}
  */
-export function getBoundValue(component, propName) {
+export function getBoundValue(component:SvelteComponent, propName:string) {
     return component.$$.ctx[propName];
 }
 
@@ -117,7 +122,7 @@ export function getBoundValue(component, propName) {
  *
  * @return {function}
  */
-export const getCallbackFunc = (component, name) => {
+export const getCallbackFunc = (component:SvelteComponent, name:string) => {
     let ctx = component.$$.ctx;
     for(let key in ctx) { 
         if(ctx.hasOwnProperty(key) && typeof ctx[key] === 'function' && ctx[key].name === name) {
@@ -137,7 +142,7 @@ export const getCallbackFunc = (component, name) => {
  *
  * @return {mixed}
  */
-export const getReferenceByType = (component, clazz) => {
+export const getReferenceByType = (component:SvelteComponent, clazz:()=>void) => {
     let ctx = component.$$.ctx;
     for(let key in ctx) { 
         if(ctx.hasOwnProperty(key) && ctx[key] instanceof clazz) {
@@ -171,15 +176,25 @@ export const getReferenceByType = (component, clazz) => {
 export const mockAnimations = () => {
     // we need to test for animations, so we are going to
     // mock the timers and requestAnimationFrame
-    let mocked = {};
+    let mocked:{
+        fakeTimers:sinon.SinonFakeTimers|null,
+        rafStub: sinon.SinonStub<[(now:number)=>void],any>|null,
+        testStartTime: number,
+        tickAnimations: (timeAmount:number) => Promise<any>
+    } = {
+        fakeTimers:null,
+        rafStub:null,
+        testStartTime:0,
+        tickAnimations: () => Promise.resolve()
+    };
 
     let origRaf = global.requestAnimationFrame;
 
     // to simulate animations progressing we need to tick the clock forward, process any raf callbacks
     // then call tick() to let svelte runs its updates
     mocked.tickAnimations = async function(timeAmount) {
-        mocked.fakeTimers.tick(timeAmount);
-        callRAFCallbacks(mocked.rafStub, Date.now()); 
+        if(mocked.fakeTimers) { mocked.fakeTimers.tick(timeAmount); }
+        if(mocked.rafStub) { callRAFCallbacks(mocked.rafStub, Date.now()); }
         await tick();
     };
 
@@ -187,12 +202,12 @@ export const mockAnimations = () => {
         mocked.fakeTimers = sinon.useFakeTimers(Date.now());
         mocked.rafStub = sinon.stub();
         global.requestAnimationFrame = mocked.rafStub;
-        set_raf(mocked.rafStub);
+        if(mocked.rafStub) { set_raf(mocked.rafStub); }
         mocked.testStartTime = Date.now();
     });
     afterEach(() => {
         global.requestAnimationFrame = origRaf;
-        mocked.fakeTimers.restore();
+        if(mocked.fakeTimers) { mocked.fakeTimers.restore(); }
     });
     after(() => {
         global.requestAnimationFrame = origRaf;

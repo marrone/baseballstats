@@ -189,27 +189,20 @@ let OTHER_KEYS = [
 ];
 
 let KEYS = LIVING_KEYS.concat(OTHER_KEYS);
-
+let docDestroy = () => {};
 const DEFAULT_HTML = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
 
-function globalJsdom(html, options, polyfills, preserveGlobals) {
-    if (html === undefined) {
-        html = DEFAULT_HTML;
-    }
-
-    if (options === undefined) {
-        options = {};
-    }
-    //let opts = Object.assign({virtualConsole}, options);
+function globalJsdom(html?:string, options?:any, polyfills?:any, preserveGlobals?:string[]) {
+    if(html === undefined) { html = DEFAULT_HTML; }
+    if(options === undefined) { options = {}; }
     let opts = Object.assign({}, options);
 
     // Idempotency
-    if (global.navigator &&
-        global.navigator.userAgent &&
-        global.navigator.userAgent.indexOf('Node.js') > -1 &&
-        global.document &&
-        typeof global.document.destroy === 'function') {
-        return global.document.destroy;
+    if(global.navigator &&
+       global.navigator.userAgent &&
+       global.navigator.userAgent.indexOf('Node.js') > -1 &&
+       global.document) {
+        return docDestroy;
     }
 
     let document = new jsdom.JSDOM(html, opts);
@@ -223,31 +216,33 @@ function globalJsdom(html, options, polyfills, preserveGlobals) {
         }
     }
 
-    let dontDelete = {};
+    let dontDelete:any = {};
     if(preserveGlobals) {
         preserveGlobals.forEach(k => dontDelete[k] = true);
     }
 
     KEYS.forEach(function (key) {
+        // @ts-ignore: TS7053
         global[key] = window[key];
     })
 
-    global.jsdomInstance = document;
-    global.document = window.document;
-    global.window = window;
+    globalThis.document = window.document;
+    //globalThis.window = window;
     window.console = global.console;
-    document.destroy = cleanup;
+    docDestroy = cleanup;
 
     function cleanup () {
         window.close(); //https://github.com/jsdom/jsdom#closing-down-a-jsdom
         KEYS.forEach(function (key) { 
             if(!dontDelete[key]) { 
+                // @ts-ignore: TS7053
                 delete global[key] 
             }
         });
         if(polyfills) {
             for(let polykey in polyfills) {
                 if(!dontDelete[polykey] && polyfills.hasOwnProperty(polykey)) {
+                    // @ts-ignore: TS7053
                     delete global[polykey];
                 }
             }
@@ -287,7 +282,7 @@ function globalJsdom(html, options, polyfills, preserveGlobals) {
 *   setupDom("<html><body></body></html>", {}, {atob: atobPolyfill});
 * });
 */
-function setupDOM(html, options, polyfills, preserveGlobals) {
+function setupDOM(html:string|undefined, options?:any, polyfills?:any, preserveGlobals?:string[]) {
     //mock a browser env with full DOM api
     before(function() {
         // load and setup jsdom env

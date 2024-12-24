@@ -6,7 +6,6 @@ import babel from '@rollup/plugin-babel';
 import terser from '@rollup/plugin-terser';
 import { sveltePreprocess } from 'svelte-preprocess';
 import css from 'rollup-plugin-css-only';
-//import svelteWarnings from './svelte-warnings.cjs';
 import fs from "fs";
 import postcssConfig from './postcss.config.cjs';
 import childProcess from 'child_process';
@@ -24,7 +23,6 @@ export default {
 		name: 'TruMedia.core',
         file: 'public/build/main' + (production ? '.min' : '') + '.js',
 	},
-    //onwarn: svelteWarnings.handleWarnings,
 	plugins: [
         svelte({
             preprocess: [
@@ -32,33 +30,16 @@ export default {
                     postcss: postcssConfig({options: {map: true}}),
                 })
             ],
-            //onwarn: svelteWarnings.handleWarnings,
-            // enable run-time checks when not in production
             compilerOptions: {
                 dev: !production,
             },
         }),
 
         css({output: (styles, styleNodes) => {
-            // we'll extract any component CSS out into
-            // a separate file better for performance
             let outfile = 'public/build/main' + (production ? '.min' : '') + '.css';
             fs.writeFileSync(outfile, styles);
-            /*
-            let bundlefile = 'public/build/bundle' + (production ? '.min' : '') + '.css';
-            childProcess.exec(`build/css.sh ${outfile} ${bundlefile}`, (error, stdout, stderr) => {
-                if(error) { console.error(error); }
-                if(stderr) { console.error(stderr); }
-                console.log(stdout);
-            });
-            */
         }}),    
-            
-        // If you have external dependencies installed from
-        // npm, you'll most likely need these plugins. In
-        // some cases you'll need additional configuration 
-        // consult the documentation for details:
-        // https://github.com/rollup/plugins/tree/master/packages/commonjs
+
         resolve({
             browser: true,
             dedupe: ['svelte']
@@ -66,7 +47,6 @@ export default {
         commonjs(),
         typescript(),
 
-        // strip console.log, etc
         production && strip({
             functions: ['console.*', 'console.log.*', 'console.dir.*', 'assert.*']
         }),
@@ -77,17 +57,10 @@ export default {
             extensions: ['.js', '.mjs', '.html', '.svelte'],
         }),
 
-        // In dev mode, call `npm run start` once
-        // the bundle has been generated
         watch && serve(),
 
-        // Watch the `public` directory and refresh the
-        // browser on changes when not in production
         watch && liveReload('public'),
 
-        // If we're building for production (npm run build
-        // instead of npm run dev), minify
-        // see: https://github.com/terser/terser#minify-options
         production && terser({safari10: true})
 	],
 	watch: {
