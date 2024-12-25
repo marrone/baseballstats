@@ -1,7 +1,9 @@
-import Foo from "../components/Foo.svelte";
+import App from "../components/App.svelte";
+import config from "./config";
 
-(new Foo({
+(new App({
     target: document.getElementById("app") || document.body,
     props: {
+        config 
     }
 }));

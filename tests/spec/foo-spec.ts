@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { mount, setupSvelteTests } from "../scripts/svelteUtils";
 import { tick } from 'svelte';
-import FooComponent from "../../src/components/Foo.svelte";
+import FooComponent from "../fixtures/Foo.svelte";
 
 describe("sanity test", () => {
 
