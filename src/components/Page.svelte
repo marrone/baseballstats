@@ -1,24 +1,21 @@
 <script lang='ts'>
     import { type Player } from "../scripts/types";
+    import { type Action } from "../scripts/Action";
 
     export let loading:boolean = false;
+    export let selectedPlayer = 0;
     export let players:Player[] | null = null;
+    export let publishEvent:((event:Action) => void) = (ev:Action) => {};
+
+    import Loading from "./Loading.svelte";
+    import PlayerSelect from "./PlayerSelect.svelte";
 </script>
 
 {#if loading}
-    <p>Loading...</p>
+    <Loading />
 {:else}
-    <select name='player' size='1'>
-        {#if players}
-            {#each players as player (player.playerId)}
-                <option value={player.playerId}>{player.playerFullName}</option>
-            {/each}
-        {:else}
-            <p>No players retreived</p>
-        {/if}
-    </select>
+    <PlayerSelect {selectedPlayer} {players} {publishEvent} />
 {/if}
 
 <style lang="scss">
-    p { color: blue; }
 </style>
