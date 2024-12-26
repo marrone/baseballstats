@@ -8,6 +8,7 @@
     import Line from './charts/Line.svelte';
     import Axis from './charts/Axis.svelte';
     import Grid from './charts/Grid.svelte';
+    import Tooltip from "./charts/Tooltip.svelte";
     import { RATE_CATS } from "../scripts/const/stats";
 
     let colors = ['#1571fe', '#008800', '#93A893'];
@@ -22,7 +23,7 @@
     let rollingStats:PlayerStats[] = [];
     $: rollingStats = appState.playerStats?.rollingAvg(appState.paCount).toArray() || [];
 
-    let xAccessor = (stats: PlayerStats):Date => new Date(stats.date);
+    let xAccessor = (stats: PlayerStats):number => (new Date(stats.date)).getTime();
     let yAccessor = (stats: PlayerStats):number => stats[appState.selectedStat] as number; 
     $: yFormat = RATE_CATS.indexOf(appState.selectedStat) >= 0 ? format(".3f") : (d: any) => d;
     $: xScale = scaleLinear()
@@ -42,10 +43,19 @@
         return lineRenderer(lineStats) as string;
     }
 
-    function handleMouseOver() {}
-    function handleMouseLeave() {}
+	// tooltip
+    $: tooltip = {left: 0, top: 0, stats: null};
+    $: bisect = bisector<PlayerStats, number>(xAccessor).left;
+    let handleMouseOver = (event: MouseEvent) => {
+        let xInverted = xScale.invert(event.offsetX - dimensions.margins.left);
+        let tooltipStats = rollingStats[bisect(rollingStats, xInverted, 0)];
+        tooltip.stats = tooltipStats;
+        tooltip.left = xScale(xAccessor(tooltipStats)) + dimensions.margins.left;
+        tooltip.top = yScale(yAccessor(tooltipStats)) - 10;
+    };
+    let handleMouseLeave = () => { tooltip.stats = null; };
+    //let handleMouseLeave = () => {};
 </script>
-
 
 <div class="chart-container">
     <div class="chart-body">
@@ -58,6 +68,14 @@
                 <Grid scale={yScale} {dimensions} />
                 <Line path={chartLine(rollingStats)} color={colors[0]} />
                 <Axis orientation="y" scale={yScale} formatTick={yFormat} {dimensions} />
+                {#if tooltip.stats}
+                    <circle
+                        cx={xScale(xAccessor(tooltip.stats))}
+                        cy={yScale(yAccessor(tooltip.stats))}
+                        r={5}
+                        fill={colors[0]}
+                        stroke="black" />
+                {/if}
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                 <rect
@@ -68,6 +86,9 @@
                     fill="transparent" />
             </g>
         </svg>
+        {#if tooltip.stats}
+            <Tooltip {...tooltip} selectedStat={appState.selectedStat} {yFormat} {yAccessor} />
+        {/if}
 	</div>
 </div>
 
@@ -78,4 +99,5 @@
         max-width: var(--chart-max-width);
         max-height: var(--char-max-height);
     }
+
 </style>
