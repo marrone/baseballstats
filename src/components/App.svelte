@@ -11,6 +11,7 @@
     // deps
     import DataService, { PlayersResponse } from "../scripts/DataService";
     import { type Action, type Payload, createErrorAction } from "../scripts/Action";
+    import PlayerStatsCollection from "../scripts/PlayerStatsCollection";
     import Page from "./Page.svelte";
     import { EVENT_NAMES as EV } from "../scripts/const/events";
 
@@ -35,29 +36,24 @@
     }
     function onPlayerChange(playerId:number) {
         if(playerId) { 
-            viewModel.loading = true;
+            appState.loading = true;
             dataService.getPlayerStats(playerId)
                 .then(resp => {
-                    viewModel.loading = false;
-                    viewModel.playerStats = resp.stats;
+                    appState.loading = false;
+                    appState.playerStats = new PlayerStatsCollection(resp.stats);
                 }).catch(err => handleAction(createErrorAction(err)));
         }
         else {
-            viewModel.playerStats = null;
+            appState.playerStats = null;
         }
-        viewModel.selectedPlayer = playerId;
+        appState.selectedPlayerId = playerId;
     }
 
-    let viewModel: {
-        publishEvent: (event:Action) => void,
-        loading: boolean,
-        selectedPlayer: number,
-        players: PlayerMap | null,
-        playerStats: PlayerStats[] | null,
-    } = {       
+    // the view model
+    let appState: AppState = {       
         publishEvent: handleAction,
         loading: true,
-        selectedPlayer: 0,
+        selectedPlayerId: 0,
         players: null,
         playerStats: null
     };
@@ -65,13 +61,13 @@
     // we need to fetch the list of players to start
     let dataService = new DataService(config);
     dataService.getPlayers().then(resp => {
-        viewModel.loading = false;
-        viewModel.players = {};
-        resp.players.forEach(p => viewModel.players![p.playerId] = p);
+        appState.loading = false;
+        appState.players = {};
+        resp.players.forEach(p => appState.players![p.playerId] = p);
     }).catch(err => {
         handleAction(createErrorAction(err));
     });
 
 </script>
 
-<Page {...viewModel} />
+<Page {appState} />

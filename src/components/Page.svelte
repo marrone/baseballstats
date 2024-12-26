@@ -1,17 +1,16 @@
 <script lang='ts'>
-    export let loading:boolean = false;
-    export let selectedPlayer:number = 0;
-    export let players:PlayerMap | null = null;
-    export let publishEvent:((event:Action) => void) = (ev:Action) => {};
+    export let appState:AppState;
 
     import Loading from "./Loading.svelte";
     import PlayerSelect from "./PlayerSelect.svelte";
+    import StatsChart from "./StatsChart.svelte";
 </script>
 
-{#if loading}
+{#if appState.loading}
     <Loading />
 {:else}
-    <PlayerSelect {selectedPlayer} {players} {publishEvent} />
+    <PlayerSelect {appState} />
+    <StatsChart {appState} />
 {/if}
 
 <style lang="scss">
