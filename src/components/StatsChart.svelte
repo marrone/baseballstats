@@ -20,7 +20,7 @@
     };
 
     let rollingStats:PlayerStats[] = [];
-    $: rollingStats = appState.playerStats?.rollingAvg(100).toArray() || [];
+    $: rollingStats = appState.playerStats?.rollingAvg(appState.paCount).toArray() || [];
 
     let xAccessor = (stats: PlayerStats):Date => new Date(stats.date);
     let yAccessor = (stats: PlayerStats):number => stats[appState.selectedStat] as number; 

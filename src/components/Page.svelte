@@ -5,6 +5,7 @@
     import PlayerSelect from "./PlayerSelect.svelte";
     import StatsChart from "./StatsChart.svelte";
     import StatSelect from "./StatSelect.svelte";
+    import PASelect from "./PASelect.svelte";
 </script>
 
 {#if appState.loading}
@@ -13,6 +14,7 @@
     <PlayerSelect {appState} />
     {#if appState.playerStats}
         <StatSelect {appState} />
+        <PASelect {appState} />
         <StatsChart {appState} />
     {/if}
 {/if}

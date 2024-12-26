@@ -19,7 +19,8 @@
     // our routing function
     function handleAction(event:Action) {
         console.log("App handleAction", event);
-        switch(event.type) {
+        switch(event.type) {    
+            case EV.PA_COUNT_CHANGE: onPACountChange(event.payload.paCount); break;
             case EV.PLAYER_CHANGE: onPlayerChange(event.payload.playerId); break;
             case EV.STAT_CAT_CHANGE: onStatCatChange(event.payload.stat); break;
             case EV.ERROR: onError(event.payload.error); break; 
@@ -55,6 +56,10 @@
         appState.selectedStat = stat;
     }
 
+    function onPACountChange(paCount:number) {
+        appState.paCount = paCount;
+    }
+
     // the view model
     let appState: AppState = {       
         publishEvent: handleAction,
@@ -62,6 +67,7 @@
         selectedPlayerId: 0,
         players: null,
         playerStats: null,
+        paCount: 100,
         selectedStat: "AVG"
     };
 

@@ -9,6 +9,7 @@ declare global {
         selectedPlayerId: number,
         players: PlayerMap | null,
         playerStats: PlayerStatsCollection | null,
+        paCount: number,
         selectedStat: GraphableStatCat,
     }
 
