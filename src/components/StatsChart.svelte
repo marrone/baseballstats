@@ -10,29 +10,27 @@
     import Grid from './charts/Grid.svelte';
     import { RATE_CATS } from "../scripts/const/stats";
 
-    let colorPalette = ['#34d399', '#C1EEFF', '#FCD757'];
+    let colors = ['#1571fe', '#008800', '#93A893'];
     let dimensions = {
         width: 800,
-        height: 600,
-        margins: {top: 20, right: 20, bottom: 30, left: 50},
-        innerHeight: 760,
-        innerWidth: 720,
+        height: 500,
+        margins: {top: 20, right: 20, bottom: 20, left: 50},
+        innerHeight: 460,
+        innerWidth: 730,
     };
 
-    let avgStats:PlayerStats[] = [];
-    $: avgStats = appState.playerStats?.rollingAvg(100).toArray() || [];
+    let rollingStats:PlayerStats[] = [];
+    $: rollingStats = appState.playerStats?.rollingAvg(100).toArray() || [];
 
     let xAccessor = (stats: PlayerStats):Date => new Date(stats.date);
     let yAccessor = (stats: PlayerStats):number => stats[appState.selectedStat] as number; 
-    //let xFormat = (d: any) => d;
     $: yFormat = RATE_CATS.indexOf(appState.selectedStat) >= 0 ? format(".3f") : (d: any) => d;
-
     $: xScale = scaleLinear()
-              .domain([xAccessor(avgStats[0]), xAccessor(avgStats[avgStats.length-1])])
+              .domain([xAccessor(rollingStats[0]), xAccessor(rollingStats[rollingStats.length-1])])
               .range([0, dimensions.innerWidth])
               .clamp(true);
     $: yScale = scaleLinear()
-              .domain([0, max(avgStats, yAccessor)!])
+              .domain([0, max(rollingStats, yAccessor)!])
               .range([dimensions.innerHeight, 0])
               .nice();
 
@@ -51,11 +49,14 @@
 
 <div class="chart-container">
     <div class="chart-body">
-        <svg class="chart" width={dimensions.width} height={dimensions.height}>
+        <svg 
+            class="chart" 
+            style={`--chart-max-width: ${dimensions.width}px; --chart-max-height: ${dimensions.height}px;`}
+            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+            preserveAspectRatio="xMidYMid meet">
             <g transform={`translate(${dimensions.margins.left}, ${dimensions.margins.top})`}>
                 <Grid scale={yScale} {dimensions} />
-                <Line path={chartLine(avgStats)} color={colorPalette[0]} />
-<!--                 <Axis orientation="x" scale={xScale} formatTick={xFormat} {dimensions} /> -->
+                <Line path={chartLine(rollingStats)} color={colors[0]} />
                 <Axis orientation="y" scale={yScale} formatTick={yFormat} {dimensions} />
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -71,4 +72,10 @@
 </div>
 
 <style lang="scss">
+    .chart {
+        width: 100%;
+        height: 100%;
+        max-width: var(--chart-max-width);
+        max-height: var(--char-max-height);
+    }
 </style>
