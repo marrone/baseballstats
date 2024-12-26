@@ -1,10 +1,7 @@
 <script lang='ts'>
-    import { type Player } from "../scripts/types";
-    import { type Action } from "../scripts/Action";
-
     export let loading:boolean = false;
-    export let selectedPlayer = 0;
-    export let players:Player[] | null = null;
+    export let selectedPlayer:number = 0;
+    export let players:PlayerMap | null = null;
     export let publishEvent:((event:Action) => void) = (ev:Action) => {};
 
     import Loading from "./Loading.svelte";

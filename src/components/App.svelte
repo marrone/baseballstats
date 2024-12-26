@@ -6,14 +6,12 @@
      */
 
     // props
-    import { type AppConfig } from "../scripts/config";
     export let config:AppConfig;
 
     // deps
     import DataService, { PlayersResponse } from "../scripts/DataService";
     import { type Action, type Payload, createErrorAction } from "../scripts/Action";
     import Page from "./Page.svelte";
-    import { type Player, type PlayerStats } from "../scripts/types";
     import { EVENT_NAMES as EV } from "../scripts/const/events";
 
     // our routing function
@@ -54,7 +52,7 @@
         publishEvent: (event:Action) => void,
         loading: boolean,
         selectedPlayer: number,
-        players: Player[] | null,
+        players: PlayerMap | null,
         playerStats: PlayerStats[] | null,
     } = {       
         publishEvent: handleAction,
@@ -68,7 +66,8 @@
     let dataService = new DataService(config);
     dataService.getPlayers().then(resp => {
         viewModel.loading = false;
-        viewModel.players = resp.players;
+        viewModel.players = {};
+        resp.players.forEach(p => viewModel.players![p.playerId] = p);
     }).catch(err => {
         handleAction(createErrorAction(err));
     });
