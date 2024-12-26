@@ -10,7 +10,9 @@
     <Loading />
 {:else}
     <PlayerSelect {appState} />
-    <StatsChart {appState} />
+    {#if appState.playerStats}
+        <StatsChart {appState} stat={"TB"} />
+    {/if}
 {/if}
 
 <style lang="scss">

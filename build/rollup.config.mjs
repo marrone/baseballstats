@@ -11,6 +11,7 @@ import postcssConfig from './postcss.config.cjs';
 import childProcess from 'child_process';
 import liveReload from 'rollup-plugin-livereload';
 import typescript from '@rollup/plugin-typescript';
+import { handleWarnings } from "./handleWarnings.js";
 
 const production = process.env.NODE_ENV === 'production';
 const watch = !!process.env.ROLLUP_WATCH;
@@ -63,6 +64,7 @@ export default {
 
         production && terser({safari10: true})
 	],
+    onwarn: handleWarnings,
 	watch: {
 		clearScreen: false
 	}

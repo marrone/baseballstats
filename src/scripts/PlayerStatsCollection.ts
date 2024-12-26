@@ -3,6 +3,7 @@ class PlayerStatsCollection {
     private stats:PlayerStats[];
 
     private countingCats = ["PA", "AB", "H", "HR", "BB", "K", "HBP", "SF", "TB", "RBI"] as const;
+    private overwriteProps = ["gameId", "opponentId", "opponentToken",] as const;
 
     constructor(stats:PlayerStats[]) {
         this.stats = stats;
@@ -12,6 +13,12 @@ class PlayerStatsCollection {
         this.countingCats.forEach(cat => {
             dest[cat] += src[cat];
         });
+        /*
+        this.overwriteProps.forEach(prop => {
+            dest[prop] = src[prop];
+        });
+        */
+       dest.date = src.date;
     }
 
     private subtract(dest:PlayerStats, src:PlayerStats) {
@@ -20,14 +27,14 @@ class PlayerStatsCollection {
         });
     }
 
-    rollingAvg(plateAttemps:number):PlayerStatsCollection {
+    rollingAvg(plateAttempts:number):PlayerStatsCollection {
         let avgStats:PlayerStats[] = [];
         if(this.stats.length == 0) { return new PlayerStatsCollection(avgStats); }
 
         // get the initial data set
         let sumStats:PlayerStats = {...this.stats[0]};
         let i = 1;
-        for(; i < this.stats.length && sumStats.PA < plateAttemps; i++) {
+        for(; i < this.stats.length && sumStats.PA < plateAttempts; i++) {
             this.add(sumStats, this.stats[i]);
         }
         avgStats.push(sumStats);
@@ -37,12 +44,12 @@ class PlayerStatsCollection {
         while(right < this.stats.length) {
             sumStats = {...sumStats}; // get a copy, we are going to modify it
             // remove the first stats
-            while(sumStats.PA > plateAttemps) { 
+            while(sumStats.PA >= plateAttempts) { 
                 this.subtract(sumStats, this.stats[left]);
                 left++;
             }
             // add the new stats to get back to the target PA
-            while(sumStats.PA < plateAttemps && right < this.stats.length) {
+            while(sumStats.PA < plateAttempts && right < this.stats.length) {
                 this.add(sumStats, this.stats[right]);
                 right++;
             }
@@ -51,6 +58,8 @@ class PlayerStatsCollection {
 
         return new PlayerStatsCollection(avgStats);
     }
+
+    toArray() { return this.stats; }
 
 }
 

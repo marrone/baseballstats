@@ -6,6 +6,7 @@ import json from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
 import { sveltePreprocess } from 'svelte-preprocess';
 import css from 'rollup-plugin-css-only';
+import { handleWarnings } from "./handleWarnings.js";
 
 export default {
     input: 'tests/spec/**/*-spec.ts',
@@ -31,10 +32,5 @@ export default {
             sourceMap: false,
         }),
 	],
-    onwarn(warning, warn) {
-        if(warning.code === 'UNRESOLVED_IMPORT' 
-        || warning.code === 'UNUSED_EXTERNAL_IMPORT'
-        || warning.pluginCode === 'unused-export-let') { return; }
-        warn(warning);
-	}
+    onwarn: handleWarnings,
 };

@@ -44,6 +44,8 @@ declare global {
         oppImage: string
     }
 
+    type CountingStatCat = "PA" | "AB" | "H" | "HR" | "BB" | "K" | "HBP" | "SF" | "TB" | "RBI";
+
 }
 
-export { type PlayerStats };
+export { type PlayerStats, type CountingStatCat };
