@@ -1,4 +1,5 @@
 import PlayerStatsCollection from "../PlayerStatsCollection";
+import { GraphableStatCat } from "./PlayerStats";
 
 declare global { 
 
@@ -8,6 +9,7 @@ declare global {
         selectedPlayerId: number,
         players: PlayerMap | null,
         playerStats: PlayerStatsCollection | null,
+        selectedStat: GraphableStatCat,
     }
 
 }

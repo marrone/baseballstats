@@ -330,10 +330,12 @@ class PlayerStatsResponse extends ApiResponse {
 
 export { 
     DataService,
+    type ServiceConfig,
     ApiResponse, 
     TokenResponse, 
     PlayersResponse, 
     PlayerStatsResponse, 
-    type ServiceConfig 
+    type PlayersResponseData,
+    type PlayerStatsResponseData,
 };
 export default DataService;

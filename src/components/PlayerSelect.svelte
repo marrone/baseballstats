@@ -4,7 +4,6 @@
     import { createPlayerChangeAction } from "../scripts/Action";
 
     function onPlayerChanged(ev:Event) {
-        console.log("PlayerSelect onPlayerChanged", ev);
         let playerId = 0;
         if(ev.target instanceof HTMLSelectElement) { 
             playerId = parseInt(ev.target.options[ev.target.selectedIndex].value);

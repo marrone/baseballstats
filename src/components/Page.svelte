@@ -4,6 +4,7 @@
     import Loading from "./Loading.svelte";
     import PlayerSelect from "./PlayerSelect.svelte";
     import StatsChart from "./StatsChart.svelte";
+    import StatSelect from "./StatSelect.svelte";
 </script>
 
 {#if appState.loading}
@@ -11,7 +12,8 @@
 {:else}
     <PlayerSelect {appState} />
     {#if appState.playerStats}
-        <StatsChart {appState} stat={"TB"} />
+        <StatSelect {appState} />
+        <StatsChart {appState} />
     {/if}
 {/if}
 

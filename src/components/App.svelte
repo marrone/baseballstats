@@ -11,6 +11,7 @@
     // deps
     import DataService, { PlayersResponse } from "../scripts/DataService";
     import { type Action, type Payload, createErrorAction } from "../scripts/Action";
+    import PlayerStats from "../scripts/PlayerStats";
     import PlayerStatsCollection from "../scripts/PlayerStatsCollection";
     import Page from "./Page.svelte";
     import { EVENT_NAMES as EV } from "../scripts/const/events";
@@ -20,6 +21,7 @@
         console.log("App handleAction", event);
         switch(event.type) {
             case EV.PLAYER_CHANGE: onPlayerChange(event.payload.playerId); break;
+            case EV.STAT_CAT_CHANGE: onStatCatChange(event.payload.stat); break;
             case EV.ERROR: onError(event.payload.error); break; 
             case EV.ERROR_DISMISSED: onErrorDismissed(); break;     
         }
@@ -40,7 +42,7 @@
             dataService.getPlayerStats(playerId)
                 .then(resp => {
                     appState.loading = false;
-                    appState.playerStats = new PlayerStatsCollection(resp.stats);
+                    appState.playerStats = new PlayerStatsCollection(resp.stats.map(s => new PlayerStats(s)));
                 }).catch(err => handleAction(createErrorAction(err)));
         }
         else {
@@ -49,13 +51,18 @@
         appState.selectedPlayerId = playerId;
     }
 
+    function onStatCatChange(stat:GraphableStatCat) {
+        appState.selectedStat = stat;
+    }
+
     // the view model
     let appState: AppState = {       
         publishEvent: handleAction,
         loading: true,
         selectedPlayerId: 0,
         players: null,
-        playerStats: null
+        playerStats: null,
+        selectedStat: "AVG"
     };
 
     // we need to fetch the list of players to start
