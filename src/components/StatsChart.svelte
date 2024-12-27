@@ -10,7 +10,9 @@
     import Grid from './charts/Grid.svelte';
     import Tooltip from "./charts/Tooltip.svelte";
     import { RATE_CATS } from "../scripts/const/stats";
+    import { colors, mergedColors } from "../scripts/const/colors";
 
+console.log("mergedColors", mergedColors);
     let dimensions = {
         width: 800,
         height: 500,
@@ -18,9 +20,9 @@
         innerHeight: 460,
         innerWidth: 730,
     };
-    let colors = ['#1571fe', '#008800', '#93A893'];
 
     // reactively compute the rolling stats to graph
+    $: isSplit = !!appState.selectedSplitStat;
     let rollingStats:PlayerStats[][] = [];
     $: {
         if(appState.playerStats) { 
@@ -88,7 +90,7 @@
             <g transform={`translate(${dimensions.margins.left}, ${dimensions.margins.top})`}>
                 <Grid scale={yScale} {dimensions} />
                 {#each rollingStats as lineStats, index (lineStats[lineStats.length-1].uid)}
-                    <Line path={chartLine(lineStats)} color={colors[index]} />
+                    <Line path={chartLine(lineStats)} color={isSplit ? mergedColors[index] : colors[index]} />
                 {/each}
                 <Axis orientation="y" scale={yScale} formatTick={yFormat} {dimensions} />
                 {#if tooltip.stats}
@@ -98,7 +100,7 @@
                                 cx={xScale(xAccessor(toolStats))}
                                 cy={yScale(yAccessor(toolStats))}
                                 r={5}
-                                fill={colors[i]}
+                                fill={isSplit ? mergedColors[i] : colors[i]}
                                 stroke="black" />
                         {/if}
 					{/each}
@@ -114,7 +116,12 @@
             </g>
         </svg>
         {#if tooltip.stats}
-            <Tooltip {...tooltip} selectedStat={appState.selectedStat} {yFormat} {yAccessor} />
+            <Tooltip 
+                {...tooltip} 
+                colors={isSplit ? mergedColors : colors}
+                selectedStat={appState.selectedStat} 
+                {yFormat} 
+                {yAccessor} />
         {/if}
 	</div>
 </div>

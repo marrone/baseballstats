@@ -7,6 +7,7 @@
     import StatSelect from "./StatSelect.svelte";
     import SplitSelect from "./SplitSelect.svelte";
     import PASelect from "./PASelect.svelte";
+    import ChartLegend from "./ChartLegend.svelte";
 </script>
 
 <section id='main'>
@@ -15,6 +16,7 @@
     {:else}
         <PlayerSelect {appState} />
         {#if appState.playerStats}
+            <ChartLegend {appState} />
             <div id='chart-controls'>
                 <StatSelect {appState} />
                 <PASelect {appState} />
