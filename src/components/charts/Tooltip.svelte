@@ -4,39 +4,46 @@
 	export let offsetX = 10;
 	export let offsetY = 10;
     export let selectedStat:string;
-    export let stats:PlayerStats;
+    export let stats:PlayerStats[] | null;
     export let yFormat: any;
     export let yAccessor: any;
 
 	import { fade } from 'svelte/transition';
 </script>
 
-<div in:fade class="chart-tooltip" style="top: {top - offsetY}px; left: {left - offsetX}px;">
-    <p class="chart-tooltip__label">
-        {selectedStat}: {yFormat(yAccessor(stats))}
-    </p>
-    <div class="chart-tooltip__body">
-        <ul class="chart-tooltip__info">
-            <li>
-                <span class="chart-tooltip__info-label">Last Date:</span>
-                {(new Date(stats.date)).toLocaleDateString("en-US", {weekday:'short', year:'numeric', month:'short', day:'numeric'})}
-            </li>
-            <li>
-                <span class="chart-tooltip__info-label">PA:</span>
-                {stats.PA}
-            </li>
-        </ul>
+{#if stats}
+    <div in:fade class="chart-tooltip" style="top: {top - offsetY}px; left: {left - offsetX}px;">
+        <p class="chart-tooltip__label">
+            Last Date:
+            {(new Date(stats[0].date)).toLocaleDateString("en-US", {weekday:'short', year:'numeric', month:'short', day:'numeric'})}
+        </p>
+        <div class="chart-tooltip__body">
+            <ul class="chart-tooltip__info">
+                {#each stats as lineStats, i}
+                    {#if lineStats}
+                        <li>
+        <!--         <img class='chart-tooltip__photo' alt="{stats.playerFullName} photo" src="{stats.playerImage}"/> -->
+        <!--         {stats.playerFullName} -->
+                            {lineStats.playerFullName}
+                            {selectedStat}: 
+                            {yFormat(yAccessor(lineStats))} ({lineStats.PA} PA)
+                        </li>
+                    {/if}
+                {/each}
+            </ul>
+        </div>
     </div>
-</div>
+{/if}
 
 <style>
 	.chart-tooltip {
         position: absolute;
+        z-index: 2;
         left: 50%;
         top: 50%;
         background: #ffffef;
         border-radius: 4px;
-        transform: translate3d(-50%, -50%, 0);
+        transform: translate3d(50%, 50%, 0);
 		transition: top 0.3s ease-out, left 0.3s ease-out;
 		transition-delay: 50ms;
 		pointer-events: none;
@@ -51,10 +58,5 @@
         display: block;
         margin: 0 0 1em;
         padding: 0;
-    }
-    .chart-tooltip__info-label {
-        display: inline-block;
-        width: 6em;
-        margin: 0 8px 0 0;
     }
 </style>

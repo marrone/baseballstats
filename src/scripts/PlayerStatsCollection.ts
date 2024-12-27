@@ -5,8 +5,6 @@ class PlayerStatsCollection {
 
     private stats:PlayerStats[];
 
-    private overwriteProps = ["gameId", "opponentId", "opponentToken",] as const;
-
     constructor(stats:PlayerStats[]) {
         this.stats = stats;
     }
@@ -15,11 +13,6 @@ class PlayerStatsCollection {
         COUNTING_CATS.forEach(cat => {
             dest[cat] += src[cat];
         });
-        /*
-        this.overwriteProps.forEach(prop => {
-            dest[prop] = src[prop];
-        });
-        */
        dest.date = src.date;
     }
 
@@ -29,6 +22,9 @@ class PlayerStatsCollection {
         });
     }
 
+    /**
+     * Compute the rolling average of the stats for the given plate attempts total
+     */
     rollingAvg(plateAttempts:number):PlayerStatsCollection {
         let avgStats:PlayerStats[] = [];
         if(this.stats.length == 0) { return new PlayerStatsCollection(avgStats); }
@@ -59,6 +55,20 @@ class PlayerStatsCollection {
         }
 
         return new PlayerStatsCollection(avgStats);
+    }
+
+    /**
+     * Splits the stats given a stat and the boundary value. Returns two collections,
+     * the first is every game where the stat was below the boundary value,
+     * and the second is every game where the stats was >= the value
+     */
+    split(stat:SplitStatCat, splitVal:number):[PlayerStatsCollection, PlayerStatsCollection] {
+        let splitStats:[PlayerStats[], PlayerStats[]] = [[], []];
+        for(let stats of this.stats) {
+            let val = Number(stats[stat]);
+            splitStats[val < splitVal ? 0 : 1].push(stats);
+        }
+        return [new PlayerStatsCollection(splitStats[0]), new PlayerStatsCollection(splitStats[1])];
     }
 
     toArray() { return this.stats; }

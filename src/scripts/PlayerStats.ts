@@ -88,6 +88,13 @@ class PlayerStats {
         this.oppImage = data.oppImage;
     }
 
+    /**
+     * A unique key for this instance
+     */
+    get uid():string {
+        return `${this.playerId}-${this.date}`;
+    }
+
     get AVG():number {
         return this.H / this.AB;
     }

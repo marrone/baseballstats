@@ -11,6 +11,8 @@ declare global {
         playerStats: PlayerStatsCollection | null,
         paCount: number,
         selectedStat: GraphableStatCat,
+        selectedSplitStat: SplitStatCat | null,
+        selectedSplitVal: number,
     }
 
 }

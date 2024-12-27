@@ -4,6 +4,7 @@ type Action =
     | {type: EV.PA_COUNT_CHANGE, payload: {paCount: number}}
     | {type: EV.PLAYER_CHANGE, payload: {playerId: number}}
     | {type: EV.STAT_CAT_CHANGE, payload: {stat: GraphableStatCat}}
+    | {type: EV.SPLIT_STAT_CHANGE, payload: {stat: SplitStatCat | null, splitVal:number}}
     | {type: EV.ERROR, payload: {error: Error}}
     | {type: EV.ERROR_DISMISSED}
     ;
@@ -30,6 +31,7 @@ function createAction<T extends EV, U extends PayloadEvent>(type: T) {
 export const createPACountChangeAction = createAction(EV.PA_COUNT_CHANGE);
 export const createPlayerChangeAction = createAction(EV.PLAYER_CHANGE);
 export const createStatCatChangeAction = createAction(EV.STAT_CAT_CHANGE);
+export const createSplitStatChangeAction = createAction(EV.SPLIT_STAT_CHANGE);
 export const createErrorAction = createAction(EV.ERROR);
 
 export { 

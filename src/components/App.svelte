@@ -23,6 +23,7 @@
             case EV.PA_COUNT_CHANGE: onPACountChange(event.payload.paCount); break;
             case EV.PLAYER_CHANGE: onPlayerChange(event.payload.playerId); break;
             case EV.STAT_CAT_CHANGE: onStatCatChange(event.payload.stat); break;
+            case EV.SPLIT_STAT_CHANGE: onSplitStatChange(event.payload.stat, event.payload.splitVal); break;
             case EV.ERROR: onError(event.payload.error); break; 
             case EV.ERROR_DISMISSED: onErrorDismissed(); break;     
         }
@@ -56,6 +57,11 @@
         appState.selectedStat = stat;
     }
 
+    function onSplitStatChange(stat:SplitStatCat|null, splitVal:number) {
+        appState.selectedSplitStat = stat;
+        appState.selectedSplitVal = splitVal;
+    }
+
     function onPACountChange(paCount:number) {
         appState.paCount = paCount;
     }
@@ -68,7 +74,9 @@
         players: null,
         playerStats: null,
         paCount: 100,
-        selectedStat: "AVG"
+        selectedStat: "AVG",
+        selectedSplitStat: null,
+        selectedSplitVal: 0,
     };
 
     // we need to fetch the list of players to start

@@ -1,5 +1,5 @@
 import { type PlayerStats as SourcePlayerStats } from "../PlayerStats";
-import { COUNTING_CATS, RATE_CATS, GRAPH_CATS } from "../const/stats";
+import { COUNTING_CATS, RATE_CATS, GRAPH_CATS, SPLIT_CATS } from "../const/stats";
 
 declare global { 
 
@@ -10,12 +10,7 @@ declare global {
     type RateStatCat = typeof RATE_CATS[number];
 
     type GraphableStatCat = typeof GRAPH_CATS[number];
+
+    type SplitStatCat = typeof SPLIT_CATS[number];
     
 }
-
-export { 
-    type PlayerStats, 
-    type CountingStatCat, 
-    type RateStatCat,
-    type GraphableStat,
-};
