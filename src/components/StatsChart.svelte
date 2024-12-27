@@ -25,7 +25,9 @@
 
     let xAccessor = (stats: PlayerStats):number => (new Date(stats.date)).getTime();
     let yAccessor = (stats: PlayerStats):number => stats[appState.selectedStat] as number; 
-    $: yFormat = RATE_CATS.indexOf(appState.selectedStat) >= 0 ? format(".3f") : (d: any) => d;
+    let decimalFormat = format(".3f");
+    let rateFormat = (d:any) => decimalFormat(d).replace(/^0/,'');
+    $: yFormat = RATE_CATS.indexOf(appState.selectedStat) >= 0 ? rateFormat : (d: any) => d;
     $: xScale = scaleLinear()
               .domain([xAccessor(rollingStats[0]), xAccessor(rollingStats[rollingStats.length-1])])
               .range([0, dimensions.innerWidth])
@@ -45,10 +47,10 @@
 
 	// tooltip
     $: tooltip = {left: 0, top: 0, stats: null};
-    $: bisect = bisector<PlayerStats, number>(xAccessor).left;
+    let bisect = bisector<PlayerStats, number>(xAccessor).left;
     let handleMouseOver = (event: MouseEvent) => {
-        let xInverted = xScale.invert(event.offsetX - dimensions.margins.left);
-        let tooltipStats = rollingStats[bisect(rollingStats, xInverted, 0)];
+        let xScaleInvert = xScale.invert(event.offsetX - dimensions.margins.left);
+        let tooltipStats = rollingStats[bisect(rollingStats, xScaleInvert, 0)];
         tooltip.stats = tooltipStats;
         tooltip.left = xScale(xAccessor(tooltipStats)) + dimensions.margins.left;
         tooltip.top = yScale(yAccessor(tooltipStats)) - 10;
@@ -98,6 +100,7 @@
         height: 100%;
         max-width: var(--chart-max-width);
         max-height: var(--char-max-height);
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     }
 
 </style>
