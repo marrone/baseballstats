@@ -24,7 +24,7 @@
                         {:else if appState.selectedSplitStat === "win"}
                             Loss
                         {:else}
-                            %lt; {appState.selectedSplitVal}
+                            &lt; {appState.selectedSplitVal}
                         {/if}
                     {/if}
                 </div>
@@ -37,7 +37,7 @@
                             {:else if appState.selectedSplitStat === "win"}
                                 Win
                             {:else}
-                                %gt;= {appState.selectedSplitVal}
+                                &gt;= {appState.selectedSplitVal}
                             {/if}
                         {/if}
                     </div>

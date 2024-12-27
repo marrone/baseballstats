@@ -161,6 +161,7 @@
     display: inline-block;
     width: 200px;
     height: Max(var(--track-height), var(--thumb-size));
+    margin: 1.5em 0 0 0;
 
     position: relative;
     top: 7px;

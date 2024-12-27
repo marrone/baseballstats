@@ -12,7 +12,6 @@
     import { RATE_CATS } from "../scripts/const/stats";
     import { colors, mergedColors } from "../scripts/const/colors";
 
-console.log("mergedColors", mergedColors);
     let dimensions = {
         width: 800,
         height: 500,
