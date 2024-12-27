@@ -72,6 +72,7 @@
         loading: true,
         selectedPlayerId: 0,
         players: null,
+        playersList: null,
         playerStats: null,
         paCount: 100,
         selectedStat: "AVG",
@@ -83,6 +84,7 @@
     let dataService = new DataService(config);
     dataService.getPlayers().then(resp => {
         appState.loading = false;
+        appState.playersList = resp.players.sort((a,b) => a.playerFullName < b.playerFullName ? -1 : 1);
         appState.players = {};
         resp.players.forEach(p => appState.players![p.playerId] = p);
     }).catch(err => {

@@ -8,6 +8,7 @@ declare global {
         loading: boolean,
         selectedPlayerId: number,
         players: PlayerMap | null,
+        playersList: Player[] | null,
         playerStats: PlayerStatsCollection | null,
         paCount: number,
         selectedStat: GraphableStatCat,

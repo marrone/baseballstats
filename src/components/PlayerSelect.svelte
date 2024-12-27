@@ -12,10 +12,10 @@
     }
 </script>
 
-{#if appState.players}
+{#if appState.playersList}
     <select name='player' size='1' on:change={onPlayerChanged}>
         <option value=''>-- Select Player --</option>
-        {#each Object.values(appState.players) as player (player.playerId)}
+        {#each appState.playersList as player (player.playerId)}
             <option 
                 selected={player.playerId == appState.selectedPlayerId} 
                 value="{player.playerId}">
