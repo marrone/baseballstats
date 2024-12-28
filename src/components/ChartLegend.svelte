@@ -2,8 +2,10 @@
     export let appState:AppState;
     
     import { colors, mergedColors } from "../scripts/const/colors";
-    import { createPlayerSelectAction } from "../scripts/Action";
+    import { createPlayerSelectAction, createPlayerChangeAction } from "../scripts/Action";
     import Loading from "./Loading.svelte";
+    import EditIcon from "./icons/Edit.svelte";
+    import DeleteIcon from "./icons/Delete.svelte";
 
     $: isSplit = appState.selectedSplitStat;
     $: players = appState.players && appState.selectedPlayerIds 
@@ -12,6 +14,24 @@
 
     function onAddPlayer() {
         appState.publishEvent(createPlayerSelectAction({index: players.length}));
+    }
+
+    function onEditPlayer(ev:Event) {
+        if(ev.target instanceof HTMLButtonElement) { 
+            let index = parseInt(ev.target.getAttribute('data-index') || "");
+            if(!isNaN(index)) {
+                appState.publishEvent(createPlayerSelectAction({index}));
+            }
+        }
+    }
+
+    function onDeletePlayer(ev:Event) {
+        if(ev.target instanceof HTMLButtonElement) { 
+            let index = parseInt(ev.target.getAttribute('data-index') || "");
+            if(!isNaN(index)) {
+                appState.publishEvent(createPlayerChangeAction({playerId: 0, playerIndex: index}));
+            }
+        }
     }
 </script>
 
@@ -45,12 +65,18 @@
                                 {:else if appState.selectedSplitStat === "win"}
                                     Win
                                 {:else}
-                                    &gt;= {appState.selectedSplitVal}
+                                    {appState.selectedSplitVal}+
                                 {/if}
                             {/if}
                         </div>
                     {/if}
                 </div>
+                <button class='player__delete' data-index={i} on:click={onDeletePlayer}>
+                    <DeleteIcon />
+                </button>
+                <button class='player__edit' data-index={i} on:click={onEditPlayer}>
+                    <EditIcon />
+                </button>
             {/if}
         </div>
     {/each}
@@ -106,10 +132,6 @@
         left: 5px;
     }
 
-    /*
-    .player__color {
-    }
-    */
     .player__color-label {
         width: 12px; 
         height: 12px;
@@ -117,6 +139,24 @@
         margin: 0 4px 0 0;
         background: var(--color);
         border-radius: 12px;
+    }
+
+    .player__delete, .player__edit {
+        border: 0;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 3px;
+        border: 1px solid black;
+        border-radius: 4px;
+        background: white;
+    }
+    .player__edit { top: 3px; }
+    .player__delete { top: 28px; }
+    .player__delete :global(svg), .player__edit :global(svg) {
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
     }
 
     .add-player-btn {

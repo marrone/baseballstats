@@ -31,6 +31,9 @@
             }
             rollingStats = statsCollections.map(s => s.rollingAvg(appState.paCount).toArray()).filter(s => s.length > 0);
         }
+        else { 
+            rollingStats = [];
+        }
     }
 
     // our graphing functions for what to graph, scale, and format

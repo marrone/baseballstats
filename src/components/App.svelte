@@ -74,8 +74,8 @@
         }
         // removing a player at an index
         else {
-            appState.selectedPlayerIds = [...appState.selectedPlayerIds.slice(0,i), ...appState.selectedPlayerIds.slice(i)];
-            appState.playerStats = [...appState.playerStats.slice(0,i), ...appState.playerStats.slice(i)];
+            appState.selectedPlayerIds = [...appState.selectedPlayerIds.slice(0,i), ...appState.selectedPlayerIds.slice(i+1)];
+            appState.playerStats = [...appState.playerStats.slice(0,i), ...appState.playerStats.slice(i+1)];
         }
     }
 
