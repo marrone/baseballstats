@@ -9,17 +9,16 @@
 </script>
 
 <section id='main'>
-    {#if appState.loading}
+    {#if appState.loading && (!appState.playersList || appState.playersList.length === 0)}
         <Loading />
     {:else}
-        <PlayerSelect {appState} />
-        {#if appState.playerStats}
-            <ChartLegend {appState} />
-            <ChartControls {appState} />
-            <StatsChart {appState} />
-        {/if}
+        <ChartLegend {appState} />
+        <ChartControls {appState} />
+        <StatsChart {appState} />
     {/if}
 </section>
+
+<PlayerSelect {appState} />
 
 <style lang="scss">
     :global(body) {

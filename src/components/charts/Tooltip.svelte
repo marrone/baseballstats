@@ -14,18 +14,23 @@
 
 {#if stats}
     <div in:fade class="chart-tooltip" style="top: {top - offsetY}px; left: {left - offsetX}px;">
-        <p class="chart-tooltip__label">
-            Last Date:
-            {(new Date(stats[0].date)).toLocaleDateString("en-US", {weekday:'short', year:'numeric', month:'short', day:'numeric'})}
-        </p>
+        {#if stats && stats.length > 0 && stats[0]}
+            <p class="chart-tooltip__label">
+                Last Date:
+                {(new Date(stats[0].date)).toLocaleDateString("en-US", {
+                    weekday:'short', 
+                    year:'numeric', 
+                    month:'short', 
+                    day:'numeric'
+                })}
+            </p>
+        {/if}
         <div class="chart-tooltip__body">
             <ul class="chart-tooltip__info">
                 {#each stats as lineStats, i}
                     {#if lineStats}
                         <li>
                             <span class='chart-tooltip__color' style={'--color: ' + colors[i]}></span>
-        <!--         <img class='chart-tooltip__photo' alt="{stats.playerFullName} photo" src="{stats.playerImage}"/> -->
-        <!--         {stats.playerFullName} -->
                             {lineStats.playerFullName}
                             {selectedStat}: 
                             {yFormat(yAccessor(lineStats))} ({lineStats.PA} PA)
@@ -60,6 +65,7 @@
         display: block;
         margin: 0 0 1em;
         padding: 0;
+        font-size: 12px;
     }
     .chart-tooltip__color {
         width: 12px; 

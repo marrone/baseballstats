@@ -51,5 +51,6 @@
         padding: 4px;
         margin: 0;
         white-space: nowrap;
+        font-size: 12px;
     }
 </style>

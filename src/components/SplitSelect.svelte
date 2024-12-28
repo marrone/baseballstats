@@ -12,17 +12,24 @@
     let range:[any, any] = [0,0];
     $: {
         if(selectedSplitStat) { 
-            range = appState.playerStats 
-                  ? extent<PlayerStats,number>(appState.playerStats.toArray(), (d:PlayerStats) => Number(d[appState.selectedSplitStat]))
-                  : [0, 0];
+            range = [0,0];
+            if(appState.playerStats.length > 0) {
+                appState.playerStats.forEach(statsCollection => {
+                    let extents = extent<PlayerStats,number>(
+                        statsCollection.toArray(), 
+                        (d:PlayerStats) => Number(d[appState.selectedSplitStat]));
+                    range[0] = Math.min(range[0], extents[0]!);
+                    range[1] = Math.max(range[1], extents[1]!);
+                });
+            }
             splitStep = getStep();
         }
     }
     
     function isBoolStat(selectedSplitStat:SplitStatCat) {
         return selectedSplitStat 
-            && appState.playerStats 
-            && (typeof appState.playerStats.toArray()[0][selectedSplitStat]) === "boolean";
+            && appState.playerStats.length > 0 
+            && (typeof appState.playerStats[0].toArray()[0][selectedSplitStat]) === "boolean";
     }
 
     function onStatCatChange(ev:Event) {

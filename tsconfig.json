@@ -1,9 +1,9 @@
 {
     "extends": "@tsconfig/svelte/tsconfig.json",
-    "lib": ["ESNext"],
     "include": ["src/**/*", "src/node_modules"],
 	"exclude": ["node_modules/*", "__sapper__/*", "public/*"],
     "compilerOptions": {
+        "lib": ["DOM", "es2022"],
         "verbatimModuleSyntax": true,
         "types": ["svelte"]
     }
