@@ -126,6 +126,9 @@
 </div>
 
 <style lang="scss">
+    .chart-container {
+        position: relative;
+    }
     .chart {
         width: 100%;
         height: 100%;

@@ -1,8 +1,8 @@
 <script lang="ts">
 	export let left = 0;
 	export let top = 0;
-	export let offsetX = 10;
-	export let offsetY = 10;
+	export let offsetX = 30;
+	export let offsetY = -10;
     export let selectedStat:string;
     export let stats:PlayerStats[] | null;
     export let yFormat: any;
@@ -13,7 +13,7 @@
 </script>
 
 {#if stats}
-    <div in:fade class="chart-tooltip" style="top: {top - offsetY}px; left: {left - offsetX}px;">
+    <div in:fade class="chart-tooltip" style="top: {top + offsetY}px; left: {left + offsetX}px;">
         {#if stats && stats.length > 0 && stats[0]}
             <p class="chart-tooltip__label">
                 Last Date:
@@ -50,7 +50,7 @@
         top: 50%;
         background: #ffffef;
         border-radius: 4px;
-        transform: translate3d(50%, 50%, 0);
+        transform: translate3d(0, -100%, 0);
 		transition: top 0.3s ease-out, left 0.3s ease-out;
 		transition-delay: 50ms;
 		pointer-events: none;
