@@ -81,6 +81,7 @@
         font-size: 12px;
         color: white;
         text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        height: 120px;
     }
     .player__colors {
         width: 100%;

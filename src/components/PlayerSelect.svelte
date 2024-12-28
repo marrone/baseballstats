@@ -70,17 +70,19 @@
         max-height: 60vh;
         overflow: auto;
         padding: 1em;
-        border: 1px solid gray;
-        border-radius: 4px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5em;
     }
 
     .player {
-        margin: 0 0 0.5em 0;
+        margin: 0;
         border: 1px solid black;
         border-radius: 4px;
-        padding: 1em;
+        padding: .25em;
         overflow: hidden;
         position: relative;
+        text-align: left;
     }
     .player__label {
         cursor: pointer;
