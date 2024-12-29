@@ -96,6 +96,7 @@ class PlayerStats {
     }
 
     get AVG():number {
+        if(!this.AB) { return 0; }
         return this.H / this.AB;
     }
 
@@ -104,10 +105,13 @@ class PlayerStats {
     }
 
     get OBP():number {
-        return (this.H + this.BB + this.HBP) / (this.AB + this.BB + this.SF + this.HBP);
+        let divider = (this.AB + this.BB + this.SF + this.HBP);
+        if(!divider) { return 0; }
+        return (this.H + this.BB + this.HBP) / divider;
     }
 
     get SLG():number {
+        if(!this.AB) { return 0; }
         return this.TB / this.AB;
     }
 }

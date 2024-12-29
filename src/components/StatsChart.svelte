@@ -32,7 +32,8 @@
         if(appState.playerStats.length > 0) { 
             let statsCollections = appState.playerStats;
             if(appState.selectedSplitStat) { 
-                statsCollections = appState.playerStats.flatMap(s => s.split(appState.selectedSplitStat!, appState.selectedSplitVal));
+                statsCollections = appState.playerStats
+                    .flatMap(s => s.split(appState.selectedSplitStat!, appState.selectedSplitVal));
             }
             rollingStats = statsCollections.map(s => s.rollingAvg(appState.paCount).toArray()).filter(s => s.length > 0);
         }
