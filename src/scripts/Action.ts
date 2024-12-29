@@ -25,7 +25,7 @@ function isPayloadEvent(type:EV): type is PayloadEvent {
 }
 function createAction<T extends PayloadEvent>(type: T): (payload: Payload<T>) => Extract<Action, {type:T}>;
 function createAction<T extends NonPayloadEvent>(type: T): () => Extract<Action, {type:T}>;
-function createAction<T extends EV, U extends PayloadEvent>(type: T) {
+function createAction<T extends EV>(type: T) {
     if(isPayloadEvent(type)) {
         return (payload: Payload<typeof type>) => ({type, payload});
     }

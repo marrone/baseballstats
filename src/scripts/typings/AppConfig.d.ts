@@ -7,4 +7,4 @@ declare global {
 
 }
 
-export { type AppConfig }
+export { type AppConfig };

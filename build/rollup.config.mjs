@@ -58,8 +58,6 @@ export default {
             extensions: ['.js', '.mjs', '.html', '.svelte'],
         }),
 
-        watch && serve(),
-
         watch && liveReload('public'),
 
         production && terser({safari10: true})
@@ -69,20 +67,3 @@ export default {
 		clearScreen: false
 	}
 };
-
-function serve() {
-	let started = false;
-
-	return {
-		writeBundle() {
-			if (!started) {
-				started = true;
-
-				childProcess.spawn('npm', ['run', 'start'], {
-					stdio: ['ignore', 'inherit', 'inherit'],
-					shell: true
-				});
-			}
-		}
-	};
-}

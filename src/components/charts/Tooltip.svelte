@@ -47,7 +47,7 @@
 {/if}
 
 <style>
-	.chart-tooltip {
+    .chart-tooltip {
         position: absolute;
         z-index: 2;
         left: 50%;
@@ -55,12 +55,12 @@
         background: #ffffef;
         border-radius: 4px;
         transform: translate3d(0, -100%, 0);
-		transition: top 0.3s ease-out, left 0.3s ease-out;
-		transition-delay: 50ms;
-		pointer-events: none;
+        transition: top 0.3s ease-out, left 0.3s ease-out;
+        transition-delay: 50ms;
+        pointer-events: none;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         padding: 0.5em;
-	}
+    }
     .chart-tooltip__label {
         font-weight: bold;
     }

@@ -100,7 +100,7 @@ class PlayerStats {
     }
 
     get OPS():number {
-      return this.OBP + this.SLG;
+        return this.OBP + this.SLG;
     }
 
     get OBP():number {

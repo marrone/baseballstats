@@ -13,7 +13,7 @@ class PlayerStatsCollection {
         COUNTING_CATS.forEach(cat => {
             dest[cat] += src[cat];
         });
-       dest.date = src.date;
+        dest.date = src.date;
     }
 
     private subtract(dest:PlayerStats, src:PlayerStats) {

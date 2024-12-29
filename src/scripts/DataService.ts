@@ -11,7 +11,7 @@ function checkStatus(response:Response) {
         return response;
     } 
     else {
-        var error = new ErrorResponse(response.statusText);
+        let error = new ErrorResponse(response.statusText);
         error.response = response;
         return parseJson(response).then(({code, json}) => {
             error.response = new ApiResponse(json, code);
@@ -207,7 +207,7 @@ class DataService {
             }, timeout);
         });
 
-        let request:Promise<ResponseData> = this.getToken().then(token => {
+        let request:Promise<ResponseData> = this.getToken().then(() => {
             return this.fetch.call(win(), url, {
                 method: 'GET',
                 headers: {

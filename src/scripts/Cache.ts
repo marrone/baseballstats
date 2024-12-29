@@ -15,7 +15,7 @@ class Cache<T> {
         this.cache.set(key, val);
         try {
             if(this.cacheGuard) { localStorage.setItem(key, JSON.stringify(val)); }
-        } catch(err) {}
+        } catch(err) {} // eslint-disable-line @typescript-eslint/no-unused-vars
     }
 
     private getFromStorage(key:string):T | undefined {
@@ -33,7 +33,7 @@ class Cache<T> {
                     }
                 }
             }
-        } catch(err) {}
+        } catch(err) {} // eslint-disable-line @typescript-eslint/no-unused-vars
     }
 
     get(key:string):T | undefined {
@@ -53,7 +53,7 @@ class Cache<T> {
         this.cache.delete(key);
         try {
             if(this.cacheGuard) { localStorage.deleteItem(key); }
-        } catch(err) {}
+        } catch(err) {} // eslint-disable-line @typescript-eslint/no-unused-vars
     }
 
 }

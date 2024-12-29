@@ -30,7 +30,7 @@
 {/if}
 
 <style lang='scss'>
-	.chart-line {
-		transition: all 0.3s ease-out;
-	}
+    .chart-line {
+        transition: all 0.3s ease-out;
+    }
 </style>
