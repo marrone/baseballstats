@@ -10,6 +10,7 @@
     import ChartLegend from "./ChartLegend.svelte";
     import ChartControls from "./ChartControls.svelte";
     import StatsChart from "./StatsChart.svelte";
+    import Export from "./Export.svelte";
 </script>
 
 <section id='main'>
@@ -19,6 +20,7 @@
         <ChartLegend {appState} />
         <ChartControls {appState} />
         <StatsChart {appState} />
+        <Export {appState} />
     {/if}
 </section>
 

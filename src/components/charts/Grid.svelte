@@ -5,7 +5,7 @@
 
     export let scale: any;
     export let numberOfTicks = 4;
-    export let stroke = 'var(--colors-grid)';
+    export let stroke = 'rgba(0,0,0,0.2)';
     export let strokeWidth = 2;
     export let dimensions = {innerHeight: 0, innerWidth: 0};
 
@@ -22,9 +22,3 @@
 			{stroke} />
 	{/each}
 </g>
-
-<style lang="scss">
-    .chart-grid {
-        --colors-grid: rgba(0,0,0,0.2);
-    }
-</style>
