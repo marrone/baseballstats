@@ -22,7 +22,8 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'TruMedia.core',
-        file: 'public/build/main' + (production ? '.min' : '') + '.js',
+        //file: 'public/build/main' + (production ? '.min' : '') + '.js',
+        file: 'public/build/main.js',
 	},
 	plugins: [
         svelte({
@@ -37,7 +38,8 @@ export default {
         }),
 
         css({output: (styles, styleNodes) => {
-            let outfile = 'public/build/main' + (production ? '.min' : '') + '.css';
+            //let outfile = 'public/build/main' + (production ? '.min' : '') + '.css';
+            let outfile = 'public/build/main.css';
             fs.writeFileSync(outfile, styles);
         }}),    
 
