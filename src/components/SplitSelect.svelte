@@ -77,6 +77,6 @@
         {range} 
         step={splitStep} 
         val={selectedSplitVal} 
-        textVal={">= "+selectedSplitVal} 
+        textVal={""+selectedSplitVal+"+"} 
         onChange={handleRangeInput} />
 {/if}
