@@ -14,19 +14,14 @@
     export let colors:string[];
 
     import { fade } from 'svelte/transition';
+    import { formatDate } from "../../scripts/util";
 </script>
 
 {#if stats}
     <div in:fade class="chart-tooltip" style="top: {top + offsetY}px; left: {left + offsetX}px;">
         {#if stats && stats.length > 0 && stats[0]}
             <p class="chart-tooltip__label">
-                Last Date:
-                {(new Date(stats[0].date)).toLocaleDateString("en-US", {
-                    weekday:'short', 
-                    year:'numeric', 
-                    month:'short', 
-                    day:'numeric'
-                })}
+                Last Date: {formatDate(stats[0].date)}
             </p>
         {/if}
         <div class="chart-tooltip__body">

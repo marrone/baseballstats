@@ -13,8 +13,10 @@
     import Axis from './charts/Axis.svelte';
     import Grid from './charts/Grid.svelte';
     import Tooltip from "./charts/Tooltip.svelte";
+    import RangeSlider from "./RangeSlider.svelte";
     import { RATE_CATS } from "../scripts/const/stats";
     import { colors, mergedColors } from "../scripts/const/colors";
+    import { formatDate } from "../scripts/util";
 
     // dimensions of our chart
     let dimensions = {
@@ -48,17 +50,11 @@
     let decimalFormat = format(".3f");
     let rateFormat = (d:any) => decimalFormat(d).replace(/^0/,'');
     $: yFormat = RATE_CATS.indexOf(appState.selectedStat) >= 0 ? rateFormat : (d: any) => d;
-    $: xScale = scaleLinear()
-              .domain([
-                    rollingStats.length ? Math.min(...rollingStats.map(r => xAccessor(r[0]))) : 0,
-                    rollingStats.length ? Math.max(...rollingStats.map(r => xAccessor(r[r.length-1]))) : 0,
-               ])
-              .range([0, dimensions.innerWidth])
-              .clamp(true);
-    $: yScale = scaleLinear()
-              .domain([0, Math.max(...rollingStats.map(r => max(r, yAccessor)!))])
-              .range([dimensions.innerHeight, 0])
-              .nice();
+    $: xDomain = [rollingStats.length ? Math.min(...rollingStats.map(r => xAccessor(r[0]))) : 0,
+                  rollingStats.length ? Math.max(...rollingStats.map(r => xAccessor(r[r.length-1]))) : 0];
+    $: xScale = scaleLinear().domain(xDomain).range([0, dimensions.innerWidth]).clamp(true);
+    $: yDomain = [0, Math.max(...rollingStats.map(r => max(r, yAccessor)!))];
+    $: yScale = scaleLinear().domain(yDomain).range([dimensions.innerHeight, 0]).nice();
 
     // helper to produce the path string for the line in the chart
     function chartLine(lineStats: PlayerStats[]):string {
@@ -86,6 +82,27 @@
     };
     let handleMouseLeave = () => { tooltip.stats = null; };
     //let handleMouseLeave = () => {};
+
+    // marker line
+    let markerTimestamp = 0;
+    let markerDateString = "";
+    let markerLine = "";
+    const markerColor = "#464040";
+    function handleMarkerChange(val:number) {
+        markerTimestamp = val;
+        if(markerTimestamp <= xDomain[0] || markerTimestamp >= xDomain[1]) { 
+            markerTimestamp = 0; 
+            markerDateString = "";
+            markerLine = "";
+        }
+        else { 
+            markerDateString = formatDate(markerTimestamp);
+            let markerLineRenderer = line<number>()
+                .x((d:number) => xScale(d))
+                .y((d:number, i:number) => i * dimensions.innerHeight);
+            markerLine = markerLineRenderer([markerTimestamp, markerTimestamp]) as string;
+        }
+    }
 </script>
 
 <div class="chart-container">
@@ -97,6 +114,9 @@
             preserveAspectRatio="xMidYMid meet">
             <g transform={`translate(${dimensions.margins.left}, ${dimensions.margins.top})`}>
                 <Grid scale={yScale} {dimensions} />
+                {#if markerLine}
+                    <path d={markerLine} stroke="{markerColor}" stroke-width="1" stroke-dasharray="35,10" />
+                {/if}
                 {#each rollingStats as lineStats, index (lineStats[lineStats.length-1].uid)}
                     <Line path={chartLine(lineStats)} color={isSplit ? mergedColors[index] : colors[index]} />
                 {/each}
@@ -113,6 +133,7 @@
                         {/if}
 					{/each}
                 {/if}
+
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                 <rect
@@ -132,6 +153,19 @@
                 {yAccessor} />
         {/if}
 	</div>
+
+    {#if rollingStats && rollingStats.length}
+        <div class='marker-slider'>
+            <RangeSlider 
+                range={xDomain}
+                step={60*60*24*1000} 
+                val={markerTimestamp} 
+                textVal={markerDateString} 
+                color={markerColor}
+                onChange={handleMarkerChange} />
+            <span class='marker-slider__info'>Optionally mark a date</span>
+        </div>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -144,6 +178,12 @@
         max-width: var(--chart-max-width);
         max-height: var(--char-max-height);
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        font-size: 12px;
+    }
+
+    .marker-slider__info {
+        margin: 1em 0 0;
+        display: block;
         font-size: 12px;
     }
 </style>
