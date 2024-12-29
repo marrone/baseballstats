@@ -1,4 +1,9 @@
 <script lang='ts'>
+    /**
+     * This component renders the chart controls that the user uses to
+     * configure what to graph including the selected stat, the PA count and spit stat
+     */
+
     export let appState:AppState;
 
     import StatSelect from "./StatSelect.svelte";

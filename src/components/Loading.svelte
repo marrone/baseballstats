@@ -1,5 +1,8 @@
 <script lang="ts">
-    // source: https://loading.io/css/
+    /**
+     * Loading spinner
+     * source: https://loading.io/css/
+     */
 </script>
 
 <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

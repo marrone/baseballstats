@@ -1,3 +1,7 @@
+/**
+ * This module defines the actions/events that can be published by the UI
+ */
+
 import { EVENT_NAMES as EV } from "./const/events";
 
 type Action = 
@@ -8,7 +12,6 @@ type Action =
     | {type: EV.STAT_CAT_CHANGE, payload: {stat: GraphableStatCat}}
     | {type: EV.SPLIT_STAT_CHANGE, payload: {stat: SplitStatCat | null, splitVal:number}}
     | {type: EV.ERROR, payload: {error: Error}}
-    | {type: EV.ERROR_DISMISSED}
     ;
 
 type PayloadAction = Extract<Action, {payload:any}>;

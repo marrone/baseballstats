@@ -1,4 +1,8 @@
 <script lang='ts'>
+    /**
+    * This component renders the player select dialog
+    */
+
     export let appState:AppState;
 
     import { createPlayerChangeAction, createPlayerSelectDismissAction } from "../scripts/Action";
@@ -6,8 +10,12 @@
 
     let dialog:HTMLDialogElement | null = null;
 
+    // when the playerSelectIndex has a value, we should show the dialog
     $: if(appState.playerSelectIndex >= 0 && dialog) { dialog.showModal(); }
 
+    /**
+     * A player has been selected in the dialog
+     */
     function onPlayerChanged(ev:Event) {
         let playerId = 0;
         if(ev.target instanceof HTMLInputElement) { 
@@ -17,6 +25,9 @@
         onCloseDialog();
     }
 
+    /**
+     * The dialog was dismissed
+     */
     function onCloseDialog() {
         if(dialog) { dialog.close(); }
         appState.publishEvent(createPlayerSelectDismissAction());
@@ -38,8 +49,14 @@
                             value="{player.playerId}"
                             checked={appState.selectedPlayerIds.indexOf(player.playerId) > 0} 
                             on:change={onPlayerChanged} />
-                        <img loading="lazy" class='player__img' alt='{player.playerFullName} photo' src='{player.playerImage}' />
-                        <span class='player__name'>{player.playerFullName}</span>
+                        <img 
+                            loading="lazy" 
+                            class='player__img' 
+                            alt='{player.playerFullName} photo' 
+                            src='{player.playerImage}' />
+                        <span class='player__name'>
+                            {player.playerFullName}
+                        </span>
                     </label>
                 </div>
             {/if}

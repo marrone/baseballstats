@@ -1,3 +1,6 @@
+/**
+ * A caching class. stores in memory and local stroage to avoid unnecessary requests to the API
+ */
 class Cache<T> {
 
     private cache: Map<string, T>;
@@ -17,8 +20,8 @@ class Cache<T> {
 
     private getFromStorage(key:string):T | undefined {
         // try storage
-        // @TODO this can be removed, only temporary while dev'ing to avoid a bunch of requests
-        // we will likely max out storage due to the amount of data that can be fetched
+        // @TODO this can be removed, useful while dev'ing to avoid a bunch of requests
+        // but we will likely max out storage due to the amount of data that can be fetched
         try { 
             if(this.cacheGuard) { 
                 let json = localStorage.getItem(key);

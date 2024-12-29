@@ -1,14 +1,18 @@
 <script lang="ts">
-	export let path = '';
-	export let color = 'black';
-	export let style = '';
+    /**
+    * This component handles rendering a line on the chart
+    */
 
-	import { draw } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
+    export let path = '';
+    export let color = 'black';
+    export let style = '';
 
-	let loaded = false;
-	onMount(() => { loaded = true; });
+    import { draw } from 'svelte/transition';
+    import { quintOut } from 'svelte/easing';
+    import { onMount } from 'svelte';
+
+    let loaded = false;
+    onMount(() => { loaded = true; });
 </script>
 
 {#if loaded}

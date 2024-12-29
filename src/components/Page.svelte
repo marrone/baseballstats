@@ -1,4 +1,8 @@
 <script lang='ts'>
+    /**
+    * Top level view component. Lays out the page and various components of the app
+    */
+
     export let appState:AppState;
 
     import Loading from "./Loading.svelte";

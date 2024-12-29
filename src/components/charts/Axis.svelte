@@ -1,24 +1,28 @@
 <script lang="ts">
-	export let orientation = 'x';
-	export let scale: any;
-	export let label: string | undefined = undefined;
-	export let formatTick = (d: any) => d;
-	export let tickLength = 10;
-	export let numberOfTicks = 4;
-	export let hideAxisLine = false;
-	export let hideTicks = false;
-	export let tickValues: any[] = [];
-	export let bottom = 0;
-	export let left = 0;
-	export let style = '';
+    /**
+    * This component handles rendering an axis legend on the chart
+    */
+
+    export let orientation = 'x';
+    export let scale: any;
+    export let label: string | undefined = undefined;
+    export let formatTick = (d: any) => d;
+    export let tickLength = 10;
+    export let numberOfTicks = 4;
+    export let hideAxisLine = false;
+    export let hideTicks = false;
+    export let tickValues: any[] = [];
+    export let bottom = 0;
+    export let left = 0;
+    export let style = '';
     export let dimensions = {innerHeight:0, innerWidth:0};
 
-	$: ticks = tickValues.length
-		? tickValues
-		: scale.ticks
-		? scale.ticks(numberOfTicks)
-		: scale.domain();
-	$: padding = scale.bandwidth ? scale.bandwidth() / 2 : 0;
+    $: ticks = tickValues.length
+        ? tickValues
+        : scale.ticks
+            ? scale.ticks(numberOfTicks)
+            : scale.domain();
+    $: padding = scale.bandwidth ? scale.bandwidth() / 2 : 0;
 </script>
 
 <g class="chart-axis chart-axis--{orientation}"

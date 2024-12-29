@@ -1,4 +1,8 @@
 <script lang='ts'>
+    /**
+    * This component renders the UI for selecting the stat category to split on
+    */
+
     export let appState:AppState;
 
     import { createSplitStatChangeAction } from "../scripts/Action";
@@ -11,6 +15,8 @@
     let splitStep = getStep();
     let range:[any, any] = [0,0];
     $: {
+        // when the selected split stat changes, we need to recompute the threshold value range
+        // based on the value range of the player stats for that selected stat category
         if(selectedSplitStat) { 
             range = [0,0];
             if(appState.playerStats.length > 0) {
@@ -32,6 +38,9 @@
             && (typeof appState.playerStats[0].toArray()[0][selectedSplitStat]) === "boolean";
     }
 
+    /**
+     * The selected stat has changed
+     */
     function onStatCatChange(ev:Event) {
         if(ev.target instanceof HTMLSelectElement) {
             let opt = ev.target.options[ev.target.selectedIndex].value;
@@ -43,6 +52,10 @@
         }
     }
 
+    /**
+     * The threshold value has changed. We are going to debounce it 
+     * as it may change many times rapidly as the user slides the slider
+     */
     let debounceTimeout = 0;
     function handleRangeInput(ev:Event) { 
         clearTimeout(debounceTimeout);
@@ -59,7 +72,6 @@
         }, 50);
     }
 </script>
-
 
 <select name='splitstat' size='1' on:change={onStatCatChange}>
     <option value="">-- Split --</option>

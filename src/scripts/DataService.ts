@@ -1,3 +1,8 @@
+/**
+ * This modules defines the DataService class for making requests tot he API
+ * as well as the response classes defining each type of api response
+ */
+
 import Cache from "./Cache";
 
 function checkStatus(response:Response) {
@@ -129,8 +134,6 @@ function isPlayerStatsResponse(obj:any): obj is PlayerStatsResponseData[] {
 }
 
 /**
-* @class
-* @classdesc
 * Responsible for making requests to the backend API
 */
 class DataService {
@@ -170,7 +173,6 @@ class DataService {
         if(this.token) { return Promise.resolve(this.token); }
         if(this.cachedTokenReq) { return this.cachedTokenReq; }
         let req = this.fetch.call(win(), this.endpoints.token, {
-        //let req = this.fetch(this.endpoints.token, {
             method: 'GET',
             cache: 'no-cache',
             headers: {
@@ -269,8 +271,6 @@ class DataService {
 }
 
 /**
- * @class
- * @classdesc
  * base class representation of the api response
  */
 class ApiResponse {

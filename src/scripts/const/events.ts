@@ -1,6 +1,5 @@
 const enum EVENT_NAMES {
     ERROR = "onError",
-    ERROR_DISMISSED = "onErrorDismissed",
     PLAYER_SELECT = "onPlayerSelect",
     PLAYER_SELECT_DISMISS = "onPlayerSelectDismiss",
     PLAYER_CHANGE = "onPlayerChange",

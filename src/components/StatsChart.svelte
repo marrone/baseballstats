@@ -1,4 +1,8 @@
 <script lang='ts'>
+    /**
+    * This component renders the graph
+    */
+
     export let appState:AppState;
 
     import { bisector, max } from 'd3-array';
@@ -12,6 +16,7 @@
     import { RATE_CATS } from "../scripts/const/stats";
     import { colors, mergedColors } from "../scripts/const/colors";
 
+    // dimensions of our chart
     let dimensions = {
         width: 800,
         height: 500,
@@ -140,5 +145,4 @@
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         font-size: 12px;
     }
-
 </style>

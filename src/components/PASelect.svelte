@@ -1,8 +1,16 @@
 <script lang='ts'>
+    /**
+    * This component renders the UI control for selecting the PA count
+    * used for the computing the rolling average
+    */
+
     export let appState:AppState;
 
     import { createPACountChangeAction } from "../scripts/Action";
 
+    /**
+     * The selected PA count value has changed
+     */
     function onPACountChange(ev:Event) {
         if(ev.target instanceof HTMLSelectElement) {
             let paCount:number = parseInt(ev.target.options[ev.target.selectedIndex].value)!;

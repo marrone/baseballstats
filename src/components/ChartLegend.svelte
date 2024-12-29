@@ -1,4 +1,10 @@
 <script lang='ts'>
+    /**
+    * This component renders the selected players being graphed
+    * including their respective graph colors. Also includes the button
+    * to add players to the graph
+    */
+
     export let appState:AppState;
     
     import { colors, mergedColors } from "../scripts/const/colors";
@@ -12,10 +18,16 @@
                ? appState.selectedPlayerIds.map(id => appState.players![id]) 
                : [];
 
+    /**
+     * User has clicked the button to add a player to the graph
+     */
     function onAddPlayer() {
         appState.publishEvent(createPlayerSelectAction({index: players.length}));
     }
 
+    /**
+     * The user has clicked the edit button on an existing graphed player
+     */
     function onEditPlayer(ev:Event) {
         if(ev.target instanceof HTMLButtonElement) { 
             let index = parseInt(ev.target.getAttribute('data-index') || "");
@@ -25,6 +37,9 @@
         }
     }
 
+    /**
+     * The user has clicked the delete button on an existing graphed player
+     */
     function onDeletePlayer(ev:Event) {
         if(ev.target instanceof HTMLButtonElement) { 
             let index = parseInt(ev.target.getAttribute('data-index') || "");

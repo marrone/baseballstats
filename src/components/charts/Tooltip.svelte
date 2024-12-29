@@ -1,15 +1,19 @@
 <script lang="ts">
-	export let left = 0;
-	export let top = 0;
-	export let offsetX = 30;
-	export let offsetY = -10;
+    /**
+    * This component renders the chart tooltip when mousing over a node on the lines
+    */
+
+    export let left = 0;
+    export let top = 0;
+    export let offsetX = 30;
+    export let offsetY = -10;
     export let selectedStat:string;
     export let stats:PlayerStats[] | null;
     export let yFormat: any;
     export let yAccessor: any;
     export let colors:string[];
-    
-	import { fade } from 'svelte/transition';
+
+    import { fade } from 'svelte/transition';
 </script>
 
 {#if stats}

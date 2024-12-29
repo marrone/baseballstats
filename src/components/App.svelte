@@ -9,8 +9,8 @@
     export let config:AppConfig;
 
     // deps
-    import DataService, { PlayersResponse } from "../scripts/DataService";
-    import { type Action, type Payload, createErrorAction } from "../scripts/Action";
+    import DataService from "../scripts/DataService";
+    import { type Action, createErrorAction } from "../scripts/Action";
     import PlayerStats from "../scripts/PlayerStats";
     import PlayerStatsCollection from "../scripts/PlayerStatsCollection";
     import Page from "./Page.svelte";
@@ -46,20 +46,23 @@
             case EV.STAT_CAT_CHANGE: onStatCatChange(event.payload.stat); break;
             case EV.SPLIT_STAT_CHANGE: onSplitStatChange(event.payload.stat, event.payload.splitVal); break;
             case EV.ERROR: onError(event.payload.error); break; 
-            case EV.ERROR_DISMISSED: onErrorDismissed(); break;     
         }
     }
 
     // our action/event handlers
     function onError(err: Error) {
-        // @TODO
         console.log(err);
         alert("Sorry, an error occurred. Please try again later");
     }
-    function onErrorDismissed() {
-        // @TODO
-    }
 
+    /**
+     * Handles a change of a selected player. If selecting a player it will
+     * fetch the stats for that player and add them at the selected graph index
+     * If deselecting it will delete the selected player/stats at that graph index
+     *
+     * @param {number} - playerId - id of the player selected, or 0 if deselecting
+     * @param {number} - i - the graph index of the player selected/deselected
+     */
     function onPlayerChange(playerId:number, i:number) {
         // adding or changing a player at a given index
         if(playerId) { 
@@ -79,25 +82,40 @@
         }
     }
 
+    /**
+     * Event indicates the user is selecting a player for a given graph index
+     */
     function onPlayerSelect(index:number) {
         if(index < appState.maxSelectedPlayers) { 
             appState.playerSelectIndex = index;
         }
     }
 
+    /**
+     * The player select UI has been dismissed 
+     */
     function onPlayerSelectDismiss() {
         appState.playerSelectIndex = -1;
     }
 
+    /**
+     * The user has selected a different stat category to graph
+     */
     function onStatCatChange(stat:GraphableStatCat) {
         appState.selectedStat = stat;
     }
 
+    /**
+     * The user has selected a different stat category to split on
+     */
     function onSplitStatChange(stat:SplitStatCat|null, splitVal:number) {
         appState.selectedSplitStat = stat;
         appState.selectedSplitVal = splitVal;
     }
 
+    /**
+     * The user has selected a new PA count to compute the rolling average on
+     */
     function onPACountChange(paCount:number) {
         appState.paCount = paCount;
     }
