@@ -27,10 +27,12 @@ export default {
         commonjs(),
         typescript({tsconfig: "tsconfig.tests.json"}),
         json(),
+        /*
         strip({
             functions: ['console.*', 'console.log', 'console.log.*', 'console.dir', 'console.dir.*', 'assert.*'],
             sourceMap: false,
         }),
+        */
 	],
     onwarn: handleWarnings,
 };

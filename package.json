@@ -17,9 +17,7 @@
     "dev": "./build/build.sh",
     "prod": "NODE_ENV=production ./build/build.sh",
     "lint": "build/lint.sh",
-    "lint-fix": "build/lint.sh --fix",
-    "lint-tests": "build/lint-tests.sh",
-    "lint-tests-fix": "build/lint-tests.sh --fix"
+    "lint-fix": "build/lint.sh --fix"
   },
   "author": "",
   "license": "ISC",

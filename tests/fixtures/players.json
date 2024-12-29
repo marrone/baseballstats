@@ -1,0 +1,20 @@
+[
+  {
+    "playerId": 457759,
+    "playerFullName": "Justin Turner",
+    "playerImage": "https://content.mlb.com/images/headshots/current/60x60/457759@2x.png",
+    "teamImage": "https://www.mlbstatic.com/team-logos/111.svg"
+  },
+  {
+    "playerId": 467793,
+    "playerFullName": "Carlos Santana",
+    "playerImage": "https://content.mlb.com/images/headshots/current/60x60/467793@2x.png",
+    "teamImage": "https://www.mlbstatic.com/team-logos/158.svg"
+  },
+  {
+    "playerId": 518692,
+    "playerFullName": "Freddie Freeman",
+    "playerImage": "https://content.mlb.com/images/headshots/current/60x60/518692@2x.png",
+    "teamImage": "https://www.mlbstatic.com/team-logos/119.svg"
+  }
+]

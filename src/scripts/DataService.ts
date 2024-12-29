@@ -141,7 +141,7 @@ class DataService {
     private baseUrl:string;
     private apiKey:string;
     private token:string|null;
-    private endpoints:Endpoints;
+    public readonly endpoints:Endpoints;
     private requestCache:Cache<Promise<ResponseData>>; 
     private responseCache:Cache<ResponseData>; 
     private cachedTokenReq:Promise<string> | null;
@@ -168,6 +168,8 @@ class DataService {
 
     set fetch(val: FetchFunc) { this.fetchFunc = val; }
     get fetch():FetchFunc { return this.fetchFunc; }
+
+    get tempToken() { return this.token; }
 
     getToken():Promise<string> {
         if(this.token) { return Promise.resolve(this.token); }
