@@ -79,6 +79,7 @@
         padding: 40px;
         border: 2px solid black;
         border-radius: 8px;
+        box-sizing: border-box;
     }
 
     .close-dialog { position: absolute; right: 8px; top: 8px; }

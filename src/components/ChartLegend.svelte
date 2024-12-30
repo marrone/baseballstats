@@ -113,6 +113,11 @@
         gap: 0.25em;
         justify-content: space-between;
     }
+    @media screen and (max-width:440px) {
+        .players { 
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
     .player {
         position: relative;
         overflow: hidden;
