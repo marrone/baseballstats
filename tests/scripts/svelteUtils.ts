@@ -133,6 +133,26 @@ export const getCallbackFunc = (component:SvelteComponent, name:string) => {
 };
 
 /**
+ * Return a svelte component reference variable by name.
+ * This only supports the reactive variables that the svelte 
+ * internal tracks.
+ *
+ * @param {Svelte}
+ * @param {mixed} - object prop names that must exist on the target object to match it
+ *
+ * @return {mixed}
+ */
+export const getReferenceByPropMatch = (component:SvelteComponent, propMatch:string[]):any => {
+    let ctx = component.$$.ctx;
+    for(let key in ctx) { 
+        if(ctx.hasOwnProperty(key) && !propMatch.some(prop => !(prop in ctx[key]))) { 
+            return ctx[key];
+        }
+    }
+    return undefined;
+};
+
+/**
  * Return a svelte component reference variable by class type.
  * This only supports the reactive variables that the svelte 
  * internal tracks.

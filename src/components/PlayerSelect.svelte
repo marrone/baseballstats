@@ -29,7 +29,10 @@
      * The dialog was dismissed
      */
     function onCloseDialog() {
-        if(dialog) { dialog.close(); }
+        if(dialog) { 
+            if(dialog.close) { dialog.close(); }
+            else { dialog.open = false; }
+        }
         appState.publishEvent(createPlayerSelectDismissAction());
     }
 </script>

@@ -50,7 +50,7 @@
     }
 </script>
 
-<div class='players'>
+<div id='chart-legend' class='players'>
     {#each players as player, i (player.playerId)}
         <div class='player'>
             {#if appState.loading && appState.loadingIndex == i}

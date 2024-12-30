@@ -37,7 +37,7 @@
 
     // our routing function
     function handleAction(event:Action) {
-        console.log("App handleAction", event);
+        //console.log("App handleAction", event);
         switch(event.type) {    
             case EV.PA_COUNT_CHANGE: onPACountChange(event.payload.paCount); break;
             case EV.PLAYER_CHANGE: onPlayerChange(event.payload.playerId, event.payload.playerIndex); break;
