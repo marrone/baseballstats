@@ -37,7 +37,7 @@
                 statsCollections = appState.playerStats
                     .flatMap(s => s.split(appState.selectedSplitStat!, appState.selectedSplitVal));
             }
-            rollingStats = statsCollections.map(s => s.rollingAvg(appState.paCount).toArray()).filter(s => s.length > 0);
+            rollingStats = statsCollections.map(s => s.rollingAvg(appState.paCount).toArray());
         }
         else { 
             rollingStats = [];
@@ -50,10 +50,10 @@
     let decimalFormat = format(".3f");
     let rateFormat = (d:any) => decimalFormat(d).replace(/^0/,'');
     $: yFormat = RATE_CATS.indexOf(appState.selectedStat) >= 0 ? rateFormat : (d: any) => d;
-    $: xDomain = [rollingStats.length ? Math.min(...rollingStats.map(r => xAccessor(r[0]))) : 0,
-                  rollingStats.length ? Math.max(...rollingStats.map(r => xAccessor(r[r.length-1]))) : 0];
+    $: xDomain = [rollingStats.length ? Math.min(...rollingStats.map(r => r.length ? xAccessor(r[0]) : 0)) : 0,
+                  rollingStats.length ? Math.max(...rollingStats.map(r => r.length ? xAccessor(r[r.length-1]) : 0)) : 0];
     $: xScale = scaleLinear().domain(xDomain).range([0, dimensions.innerWidth]).clamp(true);
-    $: yDomain = [0, Math.max(...rollingStats.map(r => max(r, yAccessor)!))];
+    $: yDomain = [0, Math.max(...rollingStats.map(r => r.length ? max(r, yAccessor)! : 0))];
     $: yScale = scaleLinear().domain(yDomain).range([dimensions.innerHeight, 0]).nice();
 
     // helper to produce the path string for the line in the chart
@@ -71,7 +71,7 @@
     let bisect = bisector<PlayerStats, number>(xAccessor).left;
     let handleMouseOver = (event: MouseEvent) => {
         let xScaleInvert = xScale.invert(event.offsetX - dimensions.margins.left);
-        let tooltipStats = rollingStats.map(r => r[bisect(r, xScaleInvert, 0)]);
+        let tooltipStats = rollingStats.filter(r => r.length > 0).map(r => r[bisect(r, xScaleInvert, 0)]);
         tooltip.stats = tooltipStats;
         if(!tooltip.stats || tooltip.stats.length == 0) { 
             tooltip.stats = null;
@@ -117,7 +117,7 @@
                 {#if markerLine}
                     <path d={markerLine} stroke="{markerColor}" stroke-width="1" stroke-dasharray="35,10" />
                 {/if}
-                {#each rollingStats as lineStats, index (lineStats[lineStats.length-1].uid)}
+                {#each rollingStats as lineStats, index (lineStats.length ? lineStats[lineStats.length-1].uid : index)}
                     <Line path={chartLine(lineStats)} color={isSplit ? mergedColors[index] : colors[index]} />
                 {/each}
                 <Axis orientation="y" scale={yScale} formatTick={yFormat} {dimensions} />
